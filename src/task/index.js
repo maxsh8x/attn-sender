@@ -15,20 +15,19 @@ async function runTasks() {
 
   Object.keys(validators).forEach(name => {
     amqpCh.consume(name, async msg => {
-      const data = JSON.parse(msg.content);
-      const isBodyValid = validators[name].validate(data);
-      if (isBodyValid.error !== null) {
-        amqpCh.sendToQueue("error", Buffer.from(msg.content));
-        amqpCh.ack(msg);
-      } else {
-        try {
+      try {
+        const data = JSON.parse(msg.content);
+        const isBodyValid = validators[name].validate(data);
+        if (isBodyValid.error === null) {
           await processers[name](data);
-        } catch (e) {
-          console.error(e);
-          amqpCh.sendToQueue("error", Buffer.from(msg.content));
+        } else {
+          throw new Error('Invalid json')
         }
-        amqpCh.ack(msg);
+      } catch (e) {
+        console.error(e);
+        amqpCh.sendToQueue("error", Buffer.from(msg.content));
       }
+      amqpCh.ack(msg);
     });
   });
 }
