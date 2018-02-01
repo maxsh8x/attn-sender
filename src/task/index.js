@@ -24,7 +24,7 @@ async function runTasks() {
         try {
           await processers[name](data);
         } catch (e) {
-          console.error(e)
+          console.error(e);
           amqpCh.sendToQueue("error", Buffer.from(msg.content));
         }
         amqpCh.ack(msg);

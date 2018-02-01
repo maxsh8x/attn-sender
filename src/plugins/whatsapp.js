@@ -1,7 +1,7 @@
 const HeadlessChrome = require("simple-headless-chrome");
-const querystring = require('querystring');
+const querystring = require("querystring");
 
-const apiURL = "https://web.whatsapp.com/send"
+const apiURL = "https://web.whatsapp.com/send";
 const browser = new HeadlessChrome({
   headless: true,
   launchChrome: false,
@@ -14,7 +14,7 @@ const browser = new HeadlessChrome({
 
 async function run({ phone, text }) {
   await browser.init();
-  const escapedText = querystring.escape(text)
+  const escapedText = querystring.escape(text);
   const wsClickURL = `${apiURL}?phone=${phone}&text=${escapedText}`;
   const mainTab = await browser.newTab({
     privateTab: false
