@@ -1,0 +1,19 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "NODE_ENV=production node src/index.js",
+    "watch": "nodemon -w src -x node src/index.js",
+    "dev": "NODE_ENV=dev npm run watch"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "joi": "^13.1.1",
+    "simple-headless-chrome": "^4.3.10"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
+  }
+}
