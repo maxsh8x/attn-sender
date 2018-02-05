@@ -21,11 +21,15 @@ async function runTasks() {
         if (isBodyValid.error === null) {
           await processers[name](data);
         } else {
-          throw new Error('Invalid json')
+          throw new Error("JSON schema validation failed");
         }
       } catch (e) {
-        console.error(e);
-        amqpCh.sendToQueue("error", Buffer.from(msg.content));
+        amqpCh.sendToQueue("error", Buffer.from(msg.content), {
+          headers: {
+            name: e.name,
+            message: e.message
+          }
+        });
       }
       amqpCh.ack(msg);
     });
