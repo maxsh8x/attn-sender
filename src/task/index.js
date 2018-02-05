@@ -1,11 +1,11 @@
 const amqp = require("amqplib");
-const config = require("../lib/config");
+const { appConfig, serviceName, serviceIP } = require("../lib/config");
 
 const processers = require("./processers");
 const validators = require("./validators");
 
 async function runTasks() {
-  const amqpConn = await amqp.connect(config.amqp.host);
+  const amqpConn = await amqp.connect(appConfig.amqp.host);
   const amqpCh = await amqpConn.createChannel();
   amqpCh.qos(1);
 
@@ -26,8 +26,10 @@ async function runTasks() {
       } catch (e) {
         amqpCh.sendToQueue("error", Buffer.from(msg.content), {
           headers: {
-            name: e.name,
-            message: e.message
+            serviceName: serviceName,
+            serviceIP: serviceIP,
+            errorName: e.name,
+            errorMessage: e.message
           }
         });
       }
