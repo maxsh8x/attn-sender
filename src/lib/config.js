@@ -1,21 +1,21 @@
 const ip = require("ip");
 
-function GetAppConfig() {
+function getAppConfig() {
   return require(`../../config.${process.env.NODE_ENV}.json`);
 }
 
-function GetServiceName() {
+function getServiceName() {
   const packageJson = require("../../package.json");
   return `${packageJson.name} ${packageJson.version}`;
 }
 
-function GetServiceIP() {
+function getServiceIP() {
   return ip.address();
 }
 
-const appConfig = new GetAppConfig();
-const serviceName = new GetServiceName();
-const serviceIP = new GetServiceIP();
+const appConfig = getAppConfig();
+const serviceName = getServiceName();
+const serviceIP = getServiceIP();
 
 module.exports = {
   appConfig,
